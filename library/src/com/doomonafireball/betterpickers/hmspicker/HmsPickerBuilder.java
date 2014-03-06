@@ -111,4 +111,25 @@ public class HmsPickerBuilder {
         fragment.setHmsPickerDialogHandlers(mHmsPickerDialogHandlers);
         fragment.show(ft, "hms_dialog");
     }
+    
+    // Custom show to initialize time in picker
+    public void show(int[] initialValues) {
+        if (manager == null || styleResId == null) {
+            Log.e("HmsPickerBuilder", "setFragmentManager() and setStyleResId() must be called.");
+            return;
+        }
+        final FragmentTransaction ft = manager.beginTransaction();
+        final Fragment prev = manager.findFragmentByTag("hms_dialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+        final HmsPickerDialogFragment fragment = HmsPickerDialogFragment.newInstance(mReference, styleResId, initialValues);
+        if (targetFragment != null) {
+            fragment.setTargetFragment(targetFragment, 0);
+        }
+        fragment.setHmsPickerDialogHandlers(mHmsPickerDialogHandlers);
+        fragment.show(ft, "hms_dialog");
+    }
 }

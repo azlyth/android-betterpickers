@@ -47,8 +47,6 @@
             android:id="@+id/clear_search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
             android:layout_marginRight="8dp"

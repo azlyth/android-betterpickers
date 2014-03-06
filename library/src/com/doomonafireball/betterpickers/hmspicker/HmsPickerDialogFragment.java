@@ -6,11 +6,13 @@ import android.app.Activity;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.os.IInterface;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView.FindListener;
 import android.widget.Button;
 
 import java.util.Vector;
@@ -34,6 +36,7 @@ public class HmsPickerDialogFragment extends DialogFragment {
     private int mButtonBackgroundResId;
     private int mDialogBackgroundResId;
     private Vector<HmsPickerDialogHandler> mHmsPickerDialogHandlers = new Vector<HmsPickerDialogHandler>();
+    private int[] initialValues;
 
     /**
      * Create an instance of the Picker (used internally)
@@ -43,10 +46,16 @@ public class HmsPickerDialogFragment extends DialogFragment {
      * @return a Picker!
      */
     public static HmsPickerDialogFragment newInstance(int reference, int themeResId) {
+        int[] _initialValues = new int[5];
+        return newInstance(reference, themeResId, _initialValues);
+    }
+    
+    public static HmsPickerDialogFragment newInstance(int reference, int themeResId, int[] initialValues) {
         final HmsPickerDialogFragment frag = new HmsPickerDialogFragment();
         Bundle args = new Bundle();
         args.putInt(REFERENCE_KEY, reference);
         args.putInt(THEME_RES_ID_KEY, themeResId);
+        args.putIntArray("initialValues", initialValues);
         frag.setArguments(args);
         return frag;
     }
@@ -66,6 +75,9 @@ public class HmsPickerDialogFragment extends DialogFragment {
         }
         if (args != null && args.containsKey(THEME_RES_ID_KEY)) {
             mTheme = args.getInt(THEME_RES_ID_KEY);
+        }
+        if (args != null && args.containsKey("initialValues")) {
+            initialValues = args.getIntArray("initialValues");
         }
 
         setStyle(DialogFragment.STYLE_NO_TITLE, 0);
@@ -136,6 +148,13 @@ public class HmsPickerDialogFragment extends DialogFragment {
         mPicker.setTheme(mTheme);
         getDialog().getWindow().setBackgroundDrawableResource(mDialogBackgroundResId);
 
+        // Set the initial time value
+        if (initialValues != null) {
+        	HmsView h = (HmsView) v.findViewById(R.id.hms_text);
+        	h.setTime(initialValues[0], initialValues[1], initialValues[2], initialValues[3], initialValues[4]);
+        }
+        	
+        
         return v;
     }
 
